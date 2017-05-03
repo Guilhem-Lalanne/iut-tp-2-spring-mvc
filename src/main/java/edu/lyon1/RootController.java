@@ -3,6 +3,8 @@ package edu.lyon1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -17,14 +19,49 @@ public class RootController {
   @RequestMapping("/")
   public ModelAndView test(@RequestHeader HttpHeaders headers) {
     String headerName = "headerName";
-    List<String> headerNames = new ArrayList<String>(headers.keySet());
+    List<HttpHeader> header = new ArrayList<>();
+    // Méthode avec Set (ne fonctionne pas ... )
+    // Set<Entry<String, List<String>>> entries = headers.entrySet();
+    // for (Entry<String, List<String>> entry : entries) {
+    //  header.add(new HttpHeader(entry.getKey(),String.join(",",entry.getValue())));
+    // }
+    for (String name : headers.keySet()) {
+      header.add(new HttpHeader(name,String.join(",",headers.getValuesAsList(name))));
+    }
 
     ModelAndView mav = new ModelAndView();
-    mav.addObject(headerName, headerNames);
+    mav.addObject(headerName, header);
     mav.addObject("titre", "IUT");
     mav.addObject("corps", "bonjour");
     mav.setViewName("template");
     return mav;
+  }
+
+  private class HttpHeader {
+
+    String name;
+    String value;
+
+    private HttpHeader(String name, String value) {
+      this.name = name;
+      this.value = value;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    public void setValue(String value) {
+      this.value = value;
+    }
   }
 
 }
