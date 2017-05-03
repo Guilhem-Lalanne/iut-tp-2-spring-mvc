@@ -45,6 +45,13 @@ public class RootController {
     return "OK";
   }
 
+  @ResponseBody
+  @RequestMapping(value="/user",method = RequestMethod.GET)
+  public String getUser () {
+    User user1 = new User("Moi", "Rien");
+    return user1.getFirstName();
+  }
+
   private class HttpHeader {
 
     String name;
@@ -55,7 +62,7 @@ public class RootController {
       this.value = value;
     }
 
-    public String getName() {
+    private String getName() {
       return name;
     }
 
@@ -63,12 +70,39 @@ public class RootController {
       this.name = name;
     }
 
-    public String getValue() {
+    private String getValue() {
       return value;
     }
 
     public void setValue(String value) {
       this.value = value;
+    }
+  }
+
+  private class User {
+
+    String firstName;
+    String lastName;
+
+    private User(String firstName, String lastName) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+    }
+
+    private String getFirstName() {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+      this.firstName = firstName;
+    }
+
+    private String getLastName() {
+      return lastName;
+    }
+
+    public void setLastName(String lastName) {
+      this.lastName = lastName;
     }
   }
 
